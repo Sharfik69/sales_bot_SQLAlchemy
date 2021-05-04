@@ -1,45 +1,20 @@
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm.session import sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from db.db_worker import DBSession
+from db.models.base import BaseModel
+from db.models.user import User
 
 engine = create_engine('sqlite:///test.db', echo=True)
 
-base = declarative_base()
+BaseModel.create_base(engine)
 
+db = DBSession(sessionmaker(bind=engine)())
 
-class User(base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    fullname = Column(String)
+user_12 = User()
+user_12.tg_id = 12
+db.add_model(user_12)
 
-    def __repr__(self):
-        return '<User(name="{}", fullname="{}")'.format(self.name, self.fullname)
+db.commit_session()
 
-
-base.metadata.create_all(engine)
-session = sessionmaker(bind=engine)()
-
-user_ivan = User(name='ivan', fullname='Ivan Ivanov')
-
-session.add(user_ivan)
-session.commit()
-
-q = session.query(User).filter_by(name='ivan')
-
-other_ivan = q.first()
-
-print(other_ivan)
-
-session.add_all([User(name='petr', fullname='Petr Petrov')])
-
-session.commit()
-
-user_ivan.fullname = 'Ivan Sidorov'
-
-session.commit()
-
-s = session.execute('select * from users')
-
-records = s.first()
-print(records)
+db.close_session()

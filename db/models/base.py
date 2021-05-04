@@ -12,3 +12,7 @@ class BaseModel(Base):
     id = Column(Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
     created_at = Column(TIMESTAMP, nullable=False, default=datetime.datetime.now())
     updated_at = Column(TIMESTAMP, nullable=False, default=datetime.datetime.now(), onupdate=datetime.datetime.now())
+
+    @staticmethod
+    def create_base(engine):
+        Base.metadata.create_all(engine)
