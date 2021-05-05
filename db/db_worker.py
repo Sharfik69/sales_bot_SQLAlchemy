@@ -1,12 +1,13 @@
 from logging import getLogger
+
 from sqlalchemy.orm import Session
 
 from db.models.base import BaseModel
 
 log = getLogger()
 
-class DBSession(object):
 
+class DBSession(object):
     session: Session
 
     def __init__(self, session: Session):
@@ -29,3 +30,6 @@ class DBSession(object):
 
     def close_session(self):
         self.session.close()
+
+    def query(self, *entities, **kwargs):
+        return self.session.query(*entities, **kwargs)

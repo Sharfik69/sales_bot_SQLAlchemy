@@ -1,10 +1,10 @@
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey, LargeBinary
 import enum
 
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey, LargeBinary
 from sqlalchemy.orm import relationship
 
 from .base import BaseModel
-from .category import Category
+
 
 class ClothesSize(enum.Enum):
     XXS = 1
@@ -27,4 +27,3 @@ class Item(BaseModel):
 
     category_id = Column(Integer, ForeignKey('categories.id'))
     category = relationship("Category")
-
