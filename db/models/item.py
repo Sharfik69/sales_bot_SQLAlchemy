@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey, LargeBinary
 import enum
+
+from sqlalchemy.orm import relationship
 
 from .base import BaseModel
 from .category import Category
@@ -21,6 +23,8 @@ class Item(BaseModel):
     clothe_size = Column(Enum(ClothesSize), nullable=True)
     shoes_size = Column(Integer, nullable=True)
     description = Column(String, nullable=True)
-    category_id = Column(Integer, ForeignKey('category.id'))
+    picture = Column(LargeBinary())
 
+    category_id = Column(Integer, ForeignKey('categories.id'))
+    category = relationship("Category")
 

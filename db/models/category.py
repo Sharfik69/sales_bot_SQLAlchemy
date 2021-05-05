@@ -7,4 +7,3 @@ class Category(BaseModel):
     __tablename__ = 'categories'
 
     category_name = Column(String)
-    children = relationship("Item")
