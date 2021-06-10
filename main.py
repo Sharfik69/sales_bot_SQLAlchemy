@@ -11,7 +11,7 @@ from db.models.base import BaseModel
 from db.models.user import User
 from keyboards import main_menu
 
-engine = create_engine('sqlite:///test.db', echo=True)
+engine = create_engine('sqlite:///test.db?check_same_thread=False', echo=True)
 
 BaseModel.create_base(engine)
 
@@ -39,6 +39,13 @@ def command_add_category(message):
     if user_id in settings.__ADMINS__:
         admin.add_category(message)
 
+@bot.message_handler(commands=['add_item'])
+def command_add_item(message):
+    user_id = message.from_user.id
+
+    if user_id in settings.__ADMINS__:
+        admin.add_item(message)
+
 
 @bot.message_handler(commands=['menu'])
 def menu(message):
@@ -58,9 +65,31 @@ def next_menu(message):
         bot.send_message(message.from_user.id, 'Категории', reply_markup=markup)
 
 
-@bot.callback_query_handlers(func=lambda call: call.data.startswith('catalog'))
+
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('catalog'))
 def show_objects_from_catalog(call):
     response = call.data.split()
+    items = queries.get_items_by_cat_id(db, int(response[1]))
+    for item in items:
+        markup = types.InlineKeyboardMarkup(row_width=3)
+        markup.add( types.InlineKeyboardButton('-', callback_data='minus {}'.format(item.id)),
+                    types.InlineKeyboardButton('0', callback_data='minus {}'.format(item.id)),
+                    types.InlineKeyboardButton('+', callback_data='minus {}'.format(item.id)))
+        name = item.name
+        about = item.description
+        price = item.price
+        size = item.clothe_size
+        photo = item.picture
+        message_item = """
+            Товар: {}
+Цена: {}
+Размер: {}
+О товаре: {}
+        """.format(name, price, str(size), about)
+        bot.send_photo(call.from_user.id, photo=photo, caption=message_item, reply_markup=markup)
+    print(response)
 
 
 

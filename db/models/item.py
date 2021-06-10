@@ -15,6 +15,8 @@ class ClothesSize(enum.Enum):
     XL = 6
     XXL = 7
 
+    def __str__(self):
+        return self.name
 
 class Item(BaseModel):
     __tablename__ = 'items'
@@ -24,6 +26,7 @@ class Item(BaseModel):
     shoes_size = Column(Integer, nullable=True)
     description = Column(String, nullable=True)
     picture = Column(LargeBinary())
+    price = Column(Integer, nullable=False)
 
     category_id = Column(Integer, ForeignKey('categories.id'))
     category = relationship("Category")

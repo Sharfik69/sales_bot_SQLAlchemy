@@ -8,6 +8,8 @@ def main_menu():
 
     catalog = types.KeyboardButton('Каталог📄')
     shop_bucket = types.KeyboardButton('Корзина 🛍')
-    markup.add(catalog, shop_bucket)
+    sett = types.KeyboardButton('Настройки⚙️')
+
+    markup.add(catalog, shop_bucket, sett)
 
     return markup
