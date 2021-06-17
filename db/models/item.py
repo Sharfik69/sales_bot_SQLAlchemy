@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, Enum, ForeignKey, LargeBinary
 from sqlalchemy.orm import relationship
 
 from .base import BaseModel
+from .user import shopping_basket
 
 
 class ClothesSize(enum.Enum):

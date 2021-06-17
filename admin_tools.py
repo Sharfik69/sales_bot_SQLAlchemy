@@ -70,6 +70,9 @@ class Admin:
                     about = message.caption.split('\n')
 
                 if len(about) != 4:
+                    self.bot.send_message(message.from_user.id,
+                                          'Неправильно заполнена информация, попробуйте еще раз.',
+                                          reply_markup=remove_keyboard())
                     return
                 print(photo)
                 print(about)
